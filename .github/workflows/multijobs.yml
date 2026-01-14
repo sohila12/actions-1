@@ -1,4 +1,4 @@
-name: Generate ASCII - Multi Jobs (Before Fix)
+name: Generate ASCII - Multi Jobs (After Fix)
 on: push
 
 jobs:
@@ -8,27 +8,39 @@ jobs:
       - name: Install Cowsay Program
         run: sudo apt-get update && sudo apt-get install cowsay -y
 
-      - name: Execute Cowsay CMD
-        run: cowsay -f dragon "Run for cover, I am a DRAGON...RAWR" >> dragon.txt
+      - name: Generate dragon.txt file
+        run: cowsay -f dragon "Run for cover, I am a DRAGON...RAWR" > dragon.txt
 
-      - name: Sleep for 30 seconds
-        run: sleep 30
+      - name: Upload dragon.txt as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dragon-text-file
+          path: dragon.txt
+
 
   test_job_2:
     needs: build_job_1
     runs-on: ubuntu-latest
     steps:
-      - name: Sleep for 10 seconds
-        run: sleep 10
+      - name: Download dragon.txt artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dragon-text-file
 
-      - name: Test File Exists
+      - name: Test file content
         run: grep -i "dragon" dragon.txt
+
 
   deploy_job_3:
     needs: test_job_2
     runs-on: ubuntu-latest
     steps:
-      - name: Read File
+      - name: Download dragon.txt artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dragon-text-file
+
+      - name: Read file
         run: cat dragon.txt
 
       - name: Deploy
