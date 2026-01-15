@@ -1,4 +1,4 @@
-name: Exploring Variables and Secrets
+name: Concurrency
 on:
   workflow_dispatch:
 
@@ -14,7 +14,7 @@ jobs:
 
     concurrency:
       group: production-deployment
-      cancel-in-progress: true   # خلي الجديد يلغي القديم
+      cancel-in-progress: true   
 
     steps:
       - run: echo "Deploying..."
