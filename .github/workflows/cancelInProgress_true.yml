@@ -1,0 +1,21 @@
+name: Exploring Variables and Secrets
+on:
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Docker build..."
+
+  deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: production-deployment
+      cancel-in-progress: true   # خلي الجديد يلغي القديم
+
+    steps:
+      - run: echo "Deploying..."
+      - run: sleep 600
