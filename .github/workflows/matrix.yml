@@ -1,0 +1,24 @@
+name: Matrix Configuration
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  docker-matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-20.04, windows-latest]
+        image: [hello-world, alpine]
+        exclude:
+          - os: windows-latest
+            image: alpine
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Docker info on ${{ matrix.os }}
+        run: docker info
+
+      - name: Run image ${{ matrix.image }} on ${{ matrix.os }}
+        run: docker run ${{ matrix.image }}
