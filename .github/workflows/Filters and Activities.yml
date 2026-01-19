@@ -1,0 +1,23 @@
+name: Workflow Filters and Activities
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+      - '!feature/*'
+
+  pull_request:
+    branches: [main]
+    types: [opened, closed]
+    paths-ignore:
+      - 'README.md'
+
+jobs:
+  hello-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print trigger event
+        run: 'echo "Triggered by event: ${{ github.event_name }}"'
+
